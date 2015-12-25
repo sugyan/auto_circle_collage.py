@@ -1,0 +1,5 @@
+{
+  "name": "auto_circle_collage.py",
+  "image": "sugyan/heroku-python-opencv",
+  "addons": []
+}
