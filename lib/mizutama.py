@@ -17,7 +17,6 @@ class Mizutama:
         mzg = cv2.inRange(cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV), np.array([0, 180, 8]), np.array([360, 255, 247]))
         mzg = cv2.erode(mzg, np.ones((1, 1), np.uint8))  # kernel size?
         mzg = cv2.dilate(mzg, np.ones((1, 1), np.uint8)) # kernel size?
-        cv2.imwrite('mzg.jpg', mzg)
         _, contours, _ = cv2.findContours(mzg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         for contour in contours:
             if contour.size > 25:
@@ -59,7 +58,7 @@ class Mizutama:
             rect = cv2.boundingRect(mizugi_area)
             if self.check_rect_collision(rect, (x, y, r)):
                 hull = cv2.convexHull(mizugi_area)
-                if self.check_convex_full_collision(hull, (x, y, r)):
+                if self.check_convex_hull_collision(hull, (x, y, r)):
                     return True
         for c in self.mizutama:
             if self.detect_mizutama_collision(c, (x, y, r)):
@@ -81,7 +80,7 @@ class Mizutama:
         br = (rx + rw - cx) ** 2 + (ry + rh - cy) ** 2 < cr ** 2
         return lr or tb or tl or tr or bl or br
 
-    def check_convex_full_collision(self, hull, circle):
+    def check_convex_hull_collision(self, hull, circle):
         cx, cy, cr = circle
         if cv2.pointPolygonTest(hull, (cx, cy), False) >= 0.0:
             return True
